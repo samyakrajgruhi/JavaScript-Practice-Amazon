@@ -12,66 +12,81 @@ let productSummaryHTML = '';
 
 products.forEach((product)=>{
     let matchingItem;
+    
     cart.forEach((item)=>{
-        if(product.id === item.productId){
-            matchingItem = product;
-            productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
-            <div class="delivery-date">
-              Delivery date: Tuesday, June 21
+      let deliveryOption;
+      deliveryOptions.forEach((option)=>{
+        if(option.id === item.deliveryId){
+          deliveryOption = option;
+        }
+      });
+      let today = daysjs();
+      const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
+
+      
+
+      if(product.id === item.productId){
+          matchingItem = product;
+          productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
+          <div class="delivery-date">
+            Delivery date: ${dateString}
+          </div>
+
+          <div class="cart-item-details-grid">
+            <img class="product-image"
+              src="${matchingItem.image}">
+
+            <div class="cart-item-details">
+              <div class="product-name">
+                ${matchingItem.name}
+              </div>
+              <div class="product-price">
+                $${(matchingItem.priceCents /100).toFixed(2)}
+              </div>
+              <div class="product-quantity">
+                <span>
+                  Quantity: <span class="quantity-label js-quantity-${matchingItem.id}">${item.quantity}</span>
+                </span>
+                <span class="update-quantity-link link-primary js-update-link-${matchingItem.id} " data-update-item="${matchingItem.id}">
+                  Update
+                </span>
+                <input class="quantity-input js-quantity-input-${matchingItem.id}">
+                <span class="link-primary save-link js-save-link-${matchingItem.id}" data-save-item="${matchingItem.id}">
+                  Save
+                </span>
+                <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingItem.id}">
+                  Delete
+                </span>
+              </div>
             </div>
 
-            <div class="cart-item-details-grid">
-              <img class="product-image"
-                src="${matchingItem.image}">
-
-              <div class="cart-item-details">
-                <div class="product-name">
-                  ${matchingItem.name}
-                </div>
-                <div class="product-price">
-                  $${(matchingItem.priceCents /100).toFixed(2)}
-                </div>
-                <div class="product-quantity">
-                  <span>
-                    Quantity: <span class="quantity-label js-quantity-${matchingItem.id}">${item.quantity}</span>
-                  </span>
-                  <span class="update-quantity-link link-primary js-update-link-${matchingItem.id} " data-update-item="${matchingItem.id}">
-                    Update
-                  </span>
-                  <input class="quantity-input js-quantity-input-${matchingItem.id}">
-                  <span class="link-primary save-link js-save-link-${matchingItem.id}" data-save-item="${matchingItem.id}">
-                    Save
-                  </span>
-                  <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingItem.id}">
-                    Delete
-                  </span>
-                </div>
-              </div>
-
-              <div class="delivery-options">
-                <div class="delivery-options-title">
-                  Choose a delivery option:
-                </div>                
-                ${deliveryOptionHTML(matchingItem.id)}
-              </div>
+            <div class="delivery-options">
+              <div class="delivery-options-title">
+                Choose a delivery option:
+              </div>                
+              ${deliveryOptionHTML(matchingItem.id,item.deliveryId)}
             </div>
           </div>
-          `;
-        }
+        </div>
+        `;
+      }
     }); 
 });
 
-function deliveryOptionHTML(productId){
+
+// Delivery date and rate display //
+function deliveryOptionHTML(productId,deliveryId){
   let today = daysjs();
   let html = '';
+  
   deliveryOptions.forEach((deliveryOption)=>{
     const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${(deliveryOption.priceCents / 100).toFixed(2)}`;
     const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
     html+= 
     `<div class="delivery-option">
-        <input type="radio" checked
+        <input type="radio" 
           class="delivery-option-input"
-          name="delivery-option-${productId}">
+          name="delivery-option-${productId}" ${(deliveryOption.id === deliveryId) ? 'checked' :''}>
         <div>
           <div class="delivery-option-date">
             ${dateString}
@@ -82,7 +97,7 @@ function deliveryOptionHTML(productId){
         </div>
       </div>
       `
-  })
+  });
   return html;
 }
 
@@ -123,15 +138,19 @@ document.querySelectorAll('.save-link').forEach((link)=>{
     const saveItemId = link.dataset.saveItem;
     // Updating the Current Quantity //
     const newQuantity = Number(document.querySelector(`.js-quantity-input-${saveItemId}`).value);
-    cart.forEach((item)=>{
-      if(item.productId === saveItemId){
-        item.quantity = newQuantity;
-        document.querySelector(`.js-quantity-${saveItemId}`).innerHTML = item.quantity;
+    if( (newQuantity % 1 !== 0) || newQuantity <= 0){
+      alert('Invalid quantity input.');
+    }else{
+      cart.forEach((item)=>{
+        if(item.productId === saveItemId){
+          item.quantity = newQuantity;
+          document.querySelector(`.js-quantity-${saveItemId}`).innerHTML = item.quantity;
 
-        updateCartQuantity();
-        saveToStorage();
-      }
-    });
+          updateCartQuantity();
+          saveToStorage();
+        }
+      });
+    }
     // Making the Input ELement and Save link disappear //
     document.querySelector(`.js-save-link-${saveItemId}`).classList.remove('is-editing');    
     document.querySelector(`.js-quantity-input-${saveItemId}`).classList.remove('is-editing'); 
