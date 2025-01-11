@@ -23,12 +23,8 @@ function renderProductSummary(){
         let today = daysjs();
         const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
 
-<<<<<<< HEAD
-        if(product.id === item.productId){
-=======
         
         if(product.id === item.productId){          
->>>>>>> b788245a733cc3cc9ccbdb6a0f971fbb81349ca5
             matchingItem = product;
             productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
             <div class="delivery-date">
@@ -81,20 +77,8 @@ function renderProductSummary(){
 
   // update cart quantity //
   updateCartQuantity();
-<<<<<<< HEAD
-
-  // Code to delete an item from cart //
-  document.querySelectorAll('.js-delete-link').forEach((link)=>{
-    link.addEventListener('click',()=>{
-      const productId = link.dataset.productId;
-      removeFromCart(productId);
-      const container = document.querySelector(`.js-cart-item-container-${productId}`);
-      container.remove();
-      updateCartQuantity();
-    });
-  });
-
-
+  
+  
   // Update the Quantity on page //
   document.querySelectorAll('.update-quantity-link').forEach((link)=>{
     link.addEventListener('click',()=>{
@@ -108,6 +92,7 @@ function renderProductSummary(){
     });
   });
 
+  // event listener for save link //
   document.querySelectorAll('.save-link').forEach((link)=>{
     link.addEventListener('click',()=>{
       const saveItemId = link.dataset.saveItem;
@@ -135,21 +120,15 @@ function renderProductSummary(){
     });
   });
 
-  // Event listener for Delivery Dates //
+  // Event Listener to delivery option //
 
-  document.querySelectorAll('.js-delivery-option').forEach((element)=>{
-    element.addEventListener('click',()=>{
-      const {productId,deliveryId} = element.dataset;
-      toChangeDeliveryDate(productId,deliveryId);
+  document.querySelectorAll('.js-delivery-option').forEach((element) => {
+    element.addEventListener('click', () => {
+      const {productId, deliveryId} = element.dataset;
+      toChangeDeliveryDate(productId, deliveryId);
       renderProductSummary();
     });
   });
-
-=======
-  
-  // Add this line to attach listeners after rendering
-  attachDeliveryOptionListeners();
->>>>>>> b788245a733cc3cc9ccbdb6a0f971fbb81349ca5
 }
 
 
@@ -186,59 +165,4 @@ function deliveryOptionHTML(productId,deliveryId){
 renderProductSummary();
 
 
-<<<<<<< HEAD
-=======
 
-// Update the Quantity on page //
-document.querySelectorAll('.update-quantity-link').forEach((link)=>{
-  link.addEventListener('click',()=>{
-    const updateItemId = link.dataset.updateItem;
-    // Making the Input ELement and Save link appear //
-    document.querySelector(`.js-save-link-${updateItemId}`).classList.add('is-editing');    
-    document.querySelector(`.js-quantity-input-${updateItemId}`).classList.add('is-editing'); 
-    // Making the current Quantity and Update link disappear //
-    document.querySelector(`.js-quantity-${updateItemId}`).classList.add('is-updating');
-    link.classList.add('is-updating');
-  });
-});
-
-document.querySelectorAll('.save-link').forEach((link)=>{
-  link.addEventListener('click',()=>{
-    const saveItemId = link.dataset.saveItem;
-    // Updating the Current Quantity //
-    const newQuantity = Number(document.querySelector(`.js-quantity-input-${saveItemId}`).value);
-    if( (newQuantity % 1 !== 0) || newQuantity <= 0){
-      alert('Invalid quantity input.');
-    }else{
-      cart.forEach((item)=>{
-        if(item.productId === saveItemId){
-          item.quantity = newQuantity;
-          document.querySelector(`.js-quantity-${saveItemId}`).innerHTML = item.quantity;
-
-          updateCartQuantity();
-          saveToStorage();
-        }
-      });
-    }
-    // Making the Input ELement and Save link disappear //
-    document.querySelector(`.js-save-link-${saveItemId}`).classList.remove('is-editing');    
-    document.querySelector(`.js-quantity-input-${saveItemId}`).classList.remove('is-editing'); 
-    // Making the current Quantity and Update link appear //
-    document.querySelector(`.js-quantity-${saveItemId}`).classList.remove('is-updating');
-    document.querySelector(`.js-update-link-${saveItemId}`).classList.remove('is-updating');
-  });
-});
-
-// Add this function to checkout.js
-function attachDeliveryOptionListeners() {
-  document.querySelectorAll('.js-delivery-option').forEach((element) => {
-    element.addEventListener('click', () => {
-      const {productId, deliveryId} = element.dataset;
-      toChangeDeliveryDate(productId, deliveryId);
-      renderProductSummary();
-      // Re-attach event listeners to the new elements
-      attachDeliveryOptionListeners();
-    });
-  });
-}
->>>>>>> b788245a733cc3cc9ccbdb6a0f971fbb81349ca5
