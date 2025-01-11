@@ -24,8 +24,7 @@ function renderProductSummary(){
         const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
 
         
-
-        if(product.id === item.productId){
+        if(product.id === item.productId){          
             matchingItem = product;
             productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
             <div class="delivery-date">
@@ -78,6 +77,9 @@ function renderProductSummary(){
 
   // update cart quantity //
   updateCartQuantity();
+  
+  // Add this line to attach listeners after rendering
+  attachDeliveryOptionListeners();
 }
 
 
@@ -165,12 +167,15 @@ document.querySelectorAll('.save-link').forEach((link)=>{
   });
 });
 
-// Event listener for Delivery Dates //
-
-document.querySelectorAll('.js-delivery-option').forEach((element)=>{
-  element.addEventListener('click',()=>{
-    const {productId,deliveryId} = element.dataset;
-    toChangeDeliveryDate(productId,deliveryId);
-    renderProductSummary();
+// Add this function to checkout.js
+function attachDeliveryOptionListeners() {
+  document.querySelectorAll('.js-delivery-option').forEach((element) => {
+    element.addEventListener('click', () => {
+      const {productId, deliveryId} = element.dataset;
+      toChangeDeliveryDate(productId, deliveryId);
+      renderProductSummary();
+      // Re-attach event listeners to the new elements
+      attachDeliveryOptionListeners();
+    });
   });
-});
+}
