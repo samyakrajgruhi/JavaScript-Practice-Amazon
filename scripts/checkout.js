@@ -72,7 +72,14 @@ function renderProductSummary(){
         }
       }); 
   });
-
+  // If the cart is empty we provide a button to go back to home page to add items //
+  if(productSummaryHTML === ''){
+    productSummaryHTML = `
+    <p>Your cart is empty</p>
+    <a class="button-primary view-product-link"
+    href="index.html">View products</a>
+    `
+  }
   // Putting all HTML code on the page //
   document.querySelector('.order-summary').innerHTML = productSummaryHTML;
 
