@@ -6,6 +6,7 @@ import {deliveryOptions} from "../data/deliveryOptions.js"
 
 function updateCartQuantity(){
   document.querySelector('.js-cart-quantity-home-link').innerHTML = `${calculateCartQuantity()} items`;
+  document.querySelector('.js-payment-summary-item-count').innerHTML = `Items (${calculateCartQuantity()}):`;
 }
 function renderProductSummary(){
   let productSummaryHTML = '';
@@ -78,7 +79,6 @@ function renderProductSummary(){
   // update cart quantity //
   updateCartQuantity();
   
-  
   // Update the Quantity on page //
   document.querySelectorAll('.update-quantity-link').forEach((link)=>{
     link.addEventListener('click',()=>{
@@ -105,7 +105,7 @@ function renderProductSummary(){
           if(item.productId === saveItemId){
             item.quantity = newQuantity;
             document.querySelector(`.js-quantity-${saveItemId}`).innerHTML = item.quantity;
-
+            renderPaymentValues();
             updateCartQuantity();
             saveToStorage();
           }
@@ -120,6 +120,15 @@ function renderProductSummary(){
     });
   });
 
+  // Delete item from cart //
+  document.querySelectorAll('.js-delete-link').forEach((link)=>{
+    link.addEventListener('click',()=>{
+      const deleteItemId = link.dataset.productId;
+      removeFromCart(deleteItemId);
+      renderProductSummary();
+    });
+  });
+
   // Event Listener to delivery option //
 
   document.querySelectorAll('.js-delivery-option').forEach((element) => {
@@ -129,6 +138,8 @@ function renderProductSummary(){
       renderProductSummary();
     });
   });
+
+  renderPaymentValues();
 }
 
 
@@ -160,6 +171,52 @@ function deliveryOptionHTML(productId,deliveryId){
       `
   });
   return html;
+}
+
+function calculateItemMoney(){
+  let itemMoney = 0;
+  cart.forEach((cartItem)=>{
+      products.forEach((item)=>{
+        if(item.id === cartItem.productId){
+          itemMoney += (item.priceCents*cartItem.quantity);
+        }
+      })
+  })
+  itemMoney = (itemMoney/100).toFixed(2);
+  return Number(itemMoney);
+}
+
+function calculateShippingMoney(){
+  let shippingMoney = 0;
+  deliveryOptions.forEach((option)=>{
+    cart.forEach((cartItem)=>{
+      if (cartItem.deliveryOptionId === option.id ){
+        shippingMoney += option.priceCents;
+      } 
+    })
+  })
+  shippingMoney = (shippingMoney/100).toFixed(2);
+
+  return Number(shippingMoney);
+}
+
+function calculateTotalBeforeTax(){
+  let total = calculateItemMoney() + calculateShippingMoney();
+  console.log(total*0.1);
+  return Number(total);
+}
+
+function renderPaymentValues(){
+  const itemMoney = calculateItemMoney();
+  const shippingCharge = calculateShippingMoney();
+  const totalBeforeTax = (itemMoney+shippingCharge).toFixed(2);
+  const tax = (totalBeforeTax*0.1).toFixed(2);
+  const total = (Number(totalBeforeTax) + Number(tax)).toFixed(2);
+  document.querySelector(".js-payment-summary-item-money").innerHTML = `$${itemMoney}`;
+  document.querySelector(".js-payment-summary-shipping-money").innerHTML = `$${shippingCharge}`;
+  document.querySelector(".js-payment-before-tax").innerHTML = `$${totalBeforeTax}`;
+  document.querySelector(".js-payment-tax").innerHTML = `$${tax}`;
+  document.querySelector(".js-payment-total").innerHTML = `$${total}`;
 }
 
 renderProductSummary();
