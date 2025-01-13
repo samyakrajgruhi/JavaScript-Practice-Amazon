@@ -50,7 +50,6 @@ export function toChangeDeliveryDate(inputProductId,inputDeliveryId){
     cart.forEach((cartItem)=>{
         if(cartItem.productId === inputProductId){
             cartItem.deliveryOptionId = inputDeliveryId;
-            console.log(cartItem.deliveryOptionId);
         }
     });
     saveToStorage();

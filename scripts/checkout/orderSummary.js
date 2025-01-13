@@ -3,7 +3,7 @@ import {products} from "../../data/products.js"
 import {formatCurrency} from "../utils/money.js"
 import daysjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js"
 import {deliveryOptions} from "../../data/deliveryOptions.js"
-
+import { renderPaymentSummary } from "./paymentSummary.js"
 
 function updateCartQuantity(){
   document.querySelector('.js-cart-quantity-home-link').innerHTML = `${calculateCartQuantity()} items`;
@@ -12,65 +12,65 @@ export function renderProductSummary(){
   let productSummaryHTML = '';
 
   products.forEach((product)=>{
-      let matchingItem;
-      
-      cart.forEach((item)=>{
-        let deliveryOption;
-        deliveryOptions.forEach((option)=>{
-          if(option.id === item.deliveryOptionId){
-            deliveryOption = option;
-          }
-        });
-        let today = daysjs();
-        const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
+    let matchingItem;
+    
+    cart.forEach((item)=>{
+      let deliveryOption;
+      deliveryOptions.forEach((option)=>{
+        if(option.id === item.deliveryOptionId){
+          deliveryOption = option;
+        }
+      });
+      let today = daysjs();
+      const dateString = today.add(deliveryOption.days,'days').format('dddd, MMMM D');
 
-        
-        if(product.id === item.productId){          
-            matchingItem = product;
-            productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
-            <div class="delivery-date">
-              Delivery date: ${dateString}
+      
+      if(product.id === item.productId){          
+          matchingItem = product;
+          productSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingItem.id}">
+          <div class="delivery-date">
+            Delivery date: ${dateString}
+          </div>
+
+          <div class="cart-item-details-grid">
+            <img class="product-image"
+              src="${matchingItem.image}">
+
+            <div class="cart-item-details">
+              <div class="product-name">
+                ${matchingItem.name}
+              </div>
+              <div class="product-price">
+                $${formatCurrency(matchingItem.priceCents)}
+              </div>
+              <div class="product-quantity">
+                <span>
+                  Quantity: <span class="quantity-label js-quantity-${matchingItem.id}">${item.quantity}</span>
+                </span>
+                <span class="update-quantity-link link-primary js-update-link-${matchingItem.id} " data-update-item="${matchingItem.id}">
+                  Update
+                </span>
+                <input class="quantity-input js-quantity-input-${matchingItem.id}">
+                <span class="link-primary save-link js-save-link-${matchingItem.id}" data-save-item="${matchingItem.id}">
+                  Save
+                </span>
+                <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingItem.id}">
+                  Delete
+                </span>
+              </div>
             </div>
 
-            <div class="cart-item-details-grid">
-              <img class="product-image"
-                src="${matchingItem.image}">
-
-              <div class="cart-item-details">
-                <div class="product-name">
-                  ${matchingItem.name}
-                </div>
-                <div class="product-price">
-                  $${formatCurrency(matchingItem.priceCents)}
-                </div>
-                <div class="product-quantity">
-                  <span>
-                    Quantity: <span class="quantity-label js-quantity-${matchingItem.id}">${item.quantity}</span>
-                  </span>
-                  <span class="update-quantity-link link-primary js-update-link-${matchingItem.id} " data-update-item="${matchingItem.id}">
-                    Update
-                  </span>
-                  <input class="quantity-input js-quantity-input-${matchingItem.id}">
-                  <span class="link-primary save-link js-save-link-${matchingItem.id}" data-save-item="${matchingItem.id}">
-                    Save
-                  </span>
-                  <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingItem.id}">
-                    Delete
-                  </span>
-                </div>
-              </div>
-
-              <div class="delivery-options">
-                <div class="delivery-options-title">
-                  Choose a delivery option:
-                </div>                
-                ${deliveryOptionHTML(matchingItem.id,item.deliveryOptionId)}
-              </div>
+            <div class="delivery-options">
+              <div class="delivery-options-title">
+                Choose a delivery option:
+              </div>                
+              ${deliveryOptionHTML(matchingItem.id,item.deliveryOptionId)}
             </div>
           </div>
-          `;
-        }
-      }); 
+        </div>
+        `;
+      }
+    }); 
   });
   // If the cart is empty we provide a button to go back to home page to add items //
   if(productSummaryHTML === ''){
@@ -132,6 +132,7 @@ export function renderProductSummary(){
       const deleteItemId = link.dataset.productId;
       removeFromCart(deleteItemId);
       renderProductSummary();
+      renderPaymentSummary();
     });
   });
 
@@ -142,6 +143,7 @@ export function renderProductSummary(){
       const {productId, deliveryId} = element.dataset;
       toChangeDeliveryDate(productId, deliveryId);
       renderProductSummary();
+      renderPaymentSummary();
     });
   });
 }
