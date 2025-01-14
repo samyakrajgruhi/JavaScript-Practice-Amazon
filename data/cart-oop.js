@@ -81,9 +81,7 @@ function Cart(localStorageId){
 }
 // Cart 1 //
 const cart = Cart('cart-oop');
-
 cart.loadFromStorage();
-cart.addToCart('83d4ca15-0f35-48f5-b7a3-1ea210004f2e',1);
 console.log(cart);
 
 // Cart 2 //
