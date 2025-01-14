@@ -114,6 +114,7 @@ export function renderProductSummary(){
             document.querySelector(`.js-quantity-${saveItemId}`).innerHTML = item.quantity;
             updateCartQuantity();
             saveToStorage();
+            renderPaymentSummary();
           }
         });
       }
