@@ -10,6 +10,7 @@ A responsive e-commerce website clone of Amazon built with HTML, CSS, and JavaSc
 - Product details including name, price, images, and specifications
 - Keyword-based product categorization
 - Style-based filtering options
+- All of the products are loaded from a online backend server.
 
 ### Shopping Cart
 - Add/remove products to cart
@@ -56,3 +57,15 @@ cd JavaScript-Practice-Amazon
 ## Acknowledgments
 - Inspired by Amazon's user interface
 - Product images and data are for demonstration purposes only
+- This project was developed by following [SuperSimpleDev's](https://www.youtube.com/@SuperSimpleDev) tutorial series. Through this educational journey, I gained extensive knowledge in:
+  - JavaScript fundamentals and advanced concepts
+  - DOM manipulation and dynamic webpage updates
+  - Working with API calls and backend server integration (Basic Level)
+  - Test-Driven Development using the Jasmine testing framework
+  - Object-Oriented Programming (OOP) principles and implementation
+  - Asynchronous programming concepts (async/await)
+  - Integration of external libraries and third-party tools
+  
+  The tutorial provided an excellent foundation for understanding these concepts through practical implementation. Special thanks to SuperSimpleDev for creating such comprehensive and educational content.
+  
+  Original Tutorial Source: [https://www.youtube.com/watch?v=EerdGm-ehJQ&t=50191s]
