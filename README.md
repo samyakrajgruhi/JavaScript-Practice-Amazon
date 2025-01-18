@@ -1,4 +1,4 @@
-
+![JavaScript-Practice-Amazon](https://socialify.git.ci/samyakrajgruhi/JavaScript-Practice-Amazon/image?font=Raleway&language=1&name=1&owner=1&pattern=Transparent&theme=Dark)
 # Amazon Clone
 
 A responsive e-commerce website clone of Amazon built with HTML, CSS, and JavaScript. This project implements core e-commerce functionalities including product browsing, cart management, checkout process, and order tracking.
