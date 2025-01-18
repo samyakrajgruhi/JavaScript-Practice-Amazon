@@ -57,7 +57,7 @@ cd JavaScript-Practice-Amazon
 ## Acknowledgments
 - Inspired by Amazon's user interface
 - Product images and data are for demonstration purposes only
--This project was developed by following [SuperSimpleDev's](https://www.youtube.com/@SuperSimpleDev) tutorial series. Through this educational journey, I gained extensive knowledge in:
+- This project was developed by following [SuperSimpleDev's](https://www.youtube.com/@SuperSimpleDev) tutorial series. Through this educational journey, I gained extensive knowledge in:
   - JavaScript fundamentals and advanced concepts
   - DOM manipulation and dynamic webpage updates
   - Working with API calls and backend server integration (Basic Level)
