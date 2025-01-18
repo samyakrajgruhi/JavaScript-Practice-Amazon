@@ -4,10 +4,24 @@ import { loadProducts } from "../data/products.js";
 // import './backend-practice.js';
 // import {cars} from "../data/car.js"; 
 // import '../data/cart-class.js' 
+
+new Promise((resolve)=>{
+    loadProducts(()=>{
+        resolve();
+    });
+}).then(()=>{
+    renderProductSummary();
+    renderPaymentSummary();
+});
+
+/*
 loadProducts(()=>{
     renderProductSummary();
     renderPaymentSummary();
 });
+
+
+
 /* cars.forEach((car)=>{
     car.openTrunk();
     car.displayInfo();
