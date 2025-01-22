@@ -4,7 +4,25 @@ import { loadProducts, loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js";
 // import './backend-practice.js';
 // import {cars} from "../data/car.js"; 
-// import '../data/cart-class.js' 
+// import '../data/cart-class.js'; 
+
+async function loadPage(){
+
+    await loadProductsFetch();
+
+    await new Promise((resolve)=>{
+        loadCart(()=>{
+            resolve();
+        });
+    });
+
+    renderProductSummary();
+    renderPaymentSummary();
+}
+
+loadPage();
+
+/*
 Promise.all([
     loadProductsFetch(),
     new Promise((resolve)=>{
@@ -15,7 +33,8 @@ Promise.all([
 ]).then(()=>{
     renderProductSummary();
     renderPaymentSummary();
-})
+});
+*/
 
 /*
 new Promise((resolve)=>{
